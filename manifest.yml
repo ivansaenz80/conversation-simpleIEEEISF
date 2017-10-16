@@ -1,15 +1,13 @@
----
-declared-services:
-  my-conversation-service:
-    label: conversation
-    plan: free
+
 applications:
-- name: conversation-simple
-  command: npm start
-  path: .
-  memory: 256M
+- path: .
+  memory: 1024M
   instances: 1
+  domain: mybluemix.net
+  name: conversation-simpleIEEEISF
+  host: conversation-simpleIEEEISF
+  disk_quota: 1024M
   services:
-  - my-conversation-service
-  env:
-    NPM_CONFIG_PRODUCTION: false
+  - Conversation-pc
+  - servicioBDD
+  - servicioReconoceDanios

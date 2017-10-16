@@ -1,0 +1,121 @@
+<html>
+<head>
+  <base href="/">
+  <title>Conversation Chat App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta property="og:image" content="conversation.svg" />
+  <meta property="og:title" content="Conversation Chat Simple" />
+  <meta property="og:description" content="Sample application that shows how to use the Conversation API to identify user intents" />
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <div id="view-change-button" class="button" onclick="PayloadPanel.togglePanel(event, this)">
+    <img class="option full" src="../img/Chat Button.png">
+    <img class="option not-full" src="../img/Code Button.png">
+  </div>
+  <div id="contentParent" class="responsive-columns-wrapper">
+    <div id="chat-column-holder" class="responsive-column content-column">
+      <div class="chat-column">
+        <div id="scrollingChat"></div>
+        <label for="textInput" class="inputOutline">
+          <input id="textInput" class="input responsive-column"
+            placeholder="Type something" type="text"
+            onkeydown="ConversationPanel.inputKeyDown(event, this)">
+        </label>
+      </div>
+    </div>
+    <div id="payload-column" class="fixed-column content-column">
+      <div id="payload-initial-message">
+        Type something to see the output
+      </div>
+      <div id="payload-request" class="payload"></div>
+      <div id="payload-response" class="payload"></div>
+    </div>
+  </div>
+  <div id="myModal" class="modal">
+  <div id="subirFoto" class="modal-content">
+    
+    <form id="uploadForm" action="/subirFoto" method="post" enctype="multipart/form-data">
+        <span>Por favor toma una foto de tu vehículo y selecciónala:  </span><br>
+    <input id="imgInp" type="file" name="filetoupload" value="">
+    <br><br>
+    <img id="blah" src="#" alt="your image"/>
+    <br><br>
+    <input type="submit" value="Verificar el Grado de Daño">
+    </form>
+      
+
+      
+  </div>
+  </div>
+
+  <script src="js/common.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/conversation.js"></script>
+  <script src="js/payload.js"></script>
+  <script src="js/global.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
+  <script>
+  
+      var ejecuciones=0;
+      
+      function muestraFormulario(){
+          var modal = document.getElementById('myModal');
+          if(ejecuciones==0){
+              modal.style.display = "block";
+              ejecuciones=1;
+          }
+      }
+      
+      function escondeFormulario(){
+          var modal = document.getElementById('myModal');
+          modal.style.display = "none";
+      }
+      
+      function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            
+            reader.onload = function (e) {
+                document.getElementById("blah").src = e.target.result;
+                
+            }
+            
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    
+    $("#imgInp").change(function(){
+        readURL(this);
+    });
+  </script>
+  <script>
+  $(document).ready(function() {
+
+     $('#uploadForm').submit(function() {
+
+
+        $(this).ajaxSubmit({
+
+            error: function(xhr) {
+;
+            },
+
+            success: function(response) {
+                console.log(response);
+                ConversationPanel.displayMessage(response,'watson');
+                escondeFormulario();
+;
+
+            }
+	});
+
+	return false;
+    });    
+});
+  </script>
+</body>
+</html>

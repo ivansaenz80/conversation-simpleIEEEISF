@@ -1,5 +1,5 @@
 {
-  "name": "conversation-simple",
+  "name": "conversation-simpleIEEEISF",
   "description": "A simple Node.js based web app which shows how to use the Conversation API to recognize user intents.",
   "version": "0.1.1",
   "main": "server.js",
@@ -20,6 +20,8 @@
   "license": "Apache-2.0",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "cloudant": "1.7.x",
+    "formidable":"1.1.1",
     "dotenv": "^2.0.0",
     "express": "^4.16.1",
     "watson-developer-cloud": "^2.40.0"
@@ -35,7 +37,6 @@
     "supertest": "^1.2.0"
   },
   "engines": {
-    "node": ">= 6.9.x",
-    "npm": "> 3.10.x"
+      "node": ">=0.10"
   }
 }
