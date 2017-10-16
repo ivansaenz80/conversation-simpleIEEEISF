@@ -3,7 +3,10 @@
 /* eslint no-unused-vars: "off" */
 /* global Api: true, Common: true*/
 
+
 var ConversationPanel = (function() {
+    
+  
   var settings = {
     selectors: {
       chatBox: '#scrollingChat',
@@ -20,7 +23,10 @@ var ConversationPanel = (function() {
   // Publicly accessible methods defined
   return {
     init: init,
-    inputKeyDown: inputKeyDown
+    inputKeyDown: inputKeyDown,
+    displayMessage: displayMessage,
+    
+    
   };
 
   // Initialize the module
@@ -114,6 +120,7 @@ var ConversationPanel = (function() {
 
   // Display a user or Watson message that has just been sent/received
   function displayMessage(newPayload, typeValue) {
+    //console.log("Me dispare displayMessage");
     var isUser = isUserMessage(typeValue);
     var textExists = (newPayload.input && newPayload.input.text)
       || (newPayload.output && newPayload.output.text);
@@ -152,6 +159,8 @@ var ConversationPanel = (function() {
     }
     return null;
   }
+  
+
 
   // Constructs new DOM element from a message payload
   function buildMessageDomElements(newPayload, isUser) {
@@ -205,16 +214,47 @@ var ConversationPanel = (function() {
       scrollingChat.scrollTop = scrollEl.offsetTop;
     }
   }
+  
+
 
   // Handles the submission of input
   function inputKeyDown(event, inputBox) {
+      
+
     // Submit on enter key, dis-allowing blank messages
     if (event.keyCode === 13 && inputBox.value) {
       // Retrieve the context from the previous server response
       var context;
+      var intencion;
       var latestResponse = Api.getResponsePayload();
       if (latestResponse) {
         context = latestResponse.context;
+        console.log('La respuesta fue: '+JSON.stringify(latestResponse));
+        console.log('El tamaño de intents es: '+latestResponse.intents.length);
+        if (latestResponse.intents.length>0){
+            intencion = latestResponse.intents[0];
+            console.log('La intencion fue: '+JSON.stringify(intencion.intent));
+            if (intencion.intent === 'reportarSiniestro'){
+                console.log('traer respuesta de base de datos');
+                // consultamos en la base de datos
+                Api.consultaBase(inputBox.value,function (err, data){
+                    console.log('La info inexistente de esta poliza es: '+data);
+                    if(JSON.parse(data).estado===""){
+                        console.log('Error poliza inexistente para la cedula consultada');
+                        //no se encontro informacion de una poliza con esa cédula
+                        displayMessage({"output":{"text":"No se encontró una póliza vigente con tu identificación. Por favor comunícate con nuestras oficinas "}},settings.authorTypes.watson);                        
+                    }else{
+                        console.log('La info de esta póliza es: '+data);
+                        //desplegamos el mensaje como una respuesta del chat
+                        displayMessage({"output":{"text":"Su póliza está en estado "+JSON.parse(data).poliza.estado +" y tiene cobertura por "+ JSON.parse(data).poliza.montoasegurado +" dólares. Por favor sube una foto de tu vehículo para determinar la extensión del daño <span style='color:blue;font-weight:bold;text-decoration:underline;' onclick='muestraFormulario();'> aquí </span> "}},settings.authorTypes.watson);
+                    }
+                });
+                
+                    
+                
+                
+            }
+        }
       }
 
       // Send the user message
@@ -226,3 +266,5 @@ var ConversationPanel = (function() {
     }
   }
 }());
+
+

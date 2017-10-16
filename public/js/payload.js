@@ -21,6 +21,7 @@ var PayloadPanel = (function() {
   return {
     init: init,
     togglePanel: togglePanel
+
   };
 
   // Initialize the module
@@ -58,6 +59,7 @@ var PayloadPanel = (function() {
       displayPayload(settings.payloadTypes.response);
     };
   }
+  
 
   // Display a request or response payload that has just been sent/received
   function displayPayload(typeValue) {
@@ -77,6 +79,7 @@ var PayloadPanel = (function() {
       // or to hide (otherwise)
       var payloadInitial = document.querySelector(settings.selectors.payloadInitial);
       if (Api.getRequestPayload() || Api.getResponsePayload()) {
+        //console.log("Estoy escondiendo algo");
         payloadInitial.classList.add('hide');
       }
     }
