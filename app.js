@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 
 'use strict';
@@ -32,7 +32,7 @@ var watson = require('watson-developer-cloud');
 
 
 var visual_recognition = watson.visual_recognition({
-  api_key: '295036e67588734c6a3b1c1ee8cd4cc70a571bb1',
+  api_key: '593ce47f3c55f69497b92b995712bbde26105a0e',
   version: 'v3',
   version_date: '2016-05-20'
 });
@@ -78,14 +78,14 @@ app.post('/subirFoto', function(req, res) {
             classifier_ids: "ClasificadorSiniestro_432578065"
         };
     form.parse(req, function (err, fields, files) {
-        
+
         var oldpath = files.filetoupload.path;
         var newpath = './public/img/'+ files.filetoupload.name;
         fs.rename(oldpath, newpath, function (err) {
             if (err) throw err;
-            
+
         params.images_file= fs.createReadStream(newpath);
-        
+
         visual_recognition.classify(params, function(err, resp) {
         if (err)
             console.log(err);
@@ -98,11 +98,11 @@ app.post('/subirFoto', function(req, res) {
                 }
                 console.log('Archivo borrado');
 
-                
+
             });
-            
+
             var respuestaClasificacion="";
-            
+
             //verificamos si la imagen cayo en una clasificacion existente
             if(resp.images[0].classifiers.length>0){
                 //obtenemos la respuesta de la clasificación y dependiendo de eso se modifica el campo text de la variable entrada
@@ -111,11 +111,11 @@ app.post('/subirFoto', function(req, res) {
                 }else{
                     respuestaClasificacion="auto chocado";
                 }
-                
+
             }else{
                     respuestaClasificacion="auto sin problemas";
             }
-            
+
                 var entrada ={
                     "text":respuestaClasificacion
                 }
@@ -124,7 +124,7 @@ app.post('/subirFoto', function(req, res) {
                     context: req.body.context || {},
                     input: entrada
                 };
-                
+
                   // Send the input to the conversation service
                   conversation.message(payload, function(err, data) {
                     if (err) {
@@ -135,20 +135,20 @@ app.post('/subirFoto', function(req, res) {
                     //return data;
                     res.set('Content-Type', 'application/json');
                     return res.json(updateMessage(payload, data));
-                    
+
                   });
 
-            
+
         }
         });
-                
-      });
-      
 
-      
+      });
+
+
+
     });
-    
-    
+
+
 });
 
 
@@ -183,24 +183,24 @@ app.post('/api/message', function(req, res) {
 
 // Endpoint to be call from the client side para base de datos
 app.get('/base/consulta', function(req, res) {
-    
+
     console.log('Entre al get de base consulta');
   var cedula = req.query.cedula;
   var respuesta = {
         "estado":"",
         "montoAsegurado":0
   };
-  
+
   console.log('Cedula es: '+cedula);
-  
+
   var cloudantquery = {
         "selector": {
           "cedula": {"$eq": cedula}
         },
         "fields": ["poliza.estado","poliza.montoasegurado"]
   };
-  
-  
+
+
   db.find(cloudantquery, function(er, result) {
   if (er) {
     console.log(er);
@@ -215,8 +215,8 @@ app.get('/base/consulta', function(req, res) {
   }else{
     res.send(result.docs[0]);
   }
- 
-  
+
+
 });
 
 
