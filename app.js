@@ -75,7 +75,7 @@ app.post('/subirFoto', function(req, res) {
  var form = new formidable.IncomingForm();
  var params = {
             images_file: "",
-            classifier_ids: "ClasificadorSiniestro_432578065"
+            classifier_ids: "ClasificadorSiniestro_388897432"
         };
     form.parse(req, function (err, fields, files) {
 
