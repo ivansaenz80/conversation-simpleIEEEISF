@@ -1,0 +1,7 @@
+Como aprende watson: https://www.youtube.com/watch?v=ymUFadN_MO4
+
+10 pasos para entrenar un chatbot: https://developer.ibm.com/dwblog/2016/10-steps-train-chat-bot-chatbot-machine-learning/
+
+A developer's guide to chatbots: https://www.ibm.com/developerworks/library/cc-cognitive-chatbot-guide/index.html
+
+Documentacion Watson Conversation: https://console.bluemix.net/docs/services/conversation/index.html#about
